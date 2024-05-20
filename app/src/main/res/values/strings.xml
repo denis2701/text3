@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">TimeTrack</string>
+
+    <string-array name="spinner_options">
+        <item>Naudojimosi laikas per savaitę</item>
+        <item>Atrakinimų sk. per savaitę</item>
+    </string-array>
+
+    <string-array name="spinner_options2">
+        <item>Per savaitę</item>
+        <item>Per dieną</item>
+        <item>Per mėnesį</item>
+    </string-array>
+
+    <string-array name="create_spinner_options">
+        <item>Telefono naudojimo laikas</item>
+        <item>Programėlės naudojimo laikas</item>
+        <item>Telefono atrakinimo skaičius</item>
+        <item>Programėlės įjungimo skaičius</item>
+    </string-array>
+
+    <string-array name="spinner_options3">
+        <item>Per savaitę</item>
+        <item>Per dieną</item>
+        <item>Per mėnesį</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/pieChartImageView"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginRight="27dp"
+                android:src="@drawable/piechart"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/appNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Privatumo politika"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pieChartImageView" />
+
+            <TextView
+            android:id="@+id/overlay_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="38dp"
+            android:layout_marginRight="27dp"
+            android:gravity="left"
+            android:text="Mūsų privatumo politika paskutinį kartą buvo atnaujinta 2024-04-09."
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appNameText" />
+
+            <TextView
+                android:id="@+id/overlay_text2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="left"
+                android:text="Šioje privatumo politikoje aprašoma Mūsų politika ir procedūros, susijusios su Jūsų informacijos rinkimu, naudojimu ir atskleidimu, kai naudojatės Paslauga, ir informuojama apie Jūsų teises į privatumą bei apie tai, kaip Jus gina įstatymai."
+                android:textColor="#FFFFFF"
+                android:textSize="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text" />
+
+            <TextView
+                android:id="@+id/overlay_text3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="left"
+                android:text="Jūsų Asmens duomenis naudojame Paslaugai teikti ir tobulinti. Naudodamiesi Paslauga sutinkate, kad informacija būtų renkama ir naudojama pagal šią privatumo politiką."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text2" />
+
+            <TextView
+                android:id="@+id/overlay_text4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Aiškinimas ir apibrėžimai"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text3" />
+
+            <TextView
+                android:id="@+id/overlay_text5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Aiškinimas"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text4" />
+
+            <TextView
+                android:id="@+id/overlay_text6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="left"
+                android:text="Žodžiai, kurių pradinė raidė rašoma didžiąja raide, turi reikšmes, apibrėžtas toliau nurodytomis sąlygomis. Toliau pateiktos sąvokų apibrėžtys turi tą pačią reikšmę, neatsižvelgiant į tai, ar jos pateiktos vienaskaita, ar daugiskaita."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text5" />
+
+            <TextView
+                android:id="@+id/overlay_text7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Apibrėžimai"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text6" />
+
+            <TextView
+                android:id="@+id/overlay_text8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="left"
+                android:text="Taikant šią privatumo politiką: \n\nPrograma - tai Bendrovės teikiama programinė įranga, kurią Jūs atsisiuntėte bet kuriame elektroniniame įrenginyje, pavadinta TimeTrack. \n\nBendrovė (šioje Sutartyje vadinama Bendrovė, Mes, arba Mūsų) - tai VGDG. \nŠalis reiškia Lietuva. \n\nĮrenginys - tai bet koks įrenginys, kuriuo galima naudotis Paslauga, pvz., kompiuteris, mobilusis telefonas ar skaitmeninė planšetė. \n\nAsmens duomenys - tai bet kokia informacija, susijusi su identifikuotu ar identifikuojamu asmeniu.\n\nNaudojimo duomenys - tai automatiškai surinkti duomenys, gauti naudojantis Paslauga arba iš pačios Paslaugos infrastruktūros."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text7" />
+
+            <TextView
+                android:id="@+id/overlay_text9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="left"
+                android:text="Žodžiai, kurių pradinė raidė rašoma didžiąja raide, turi reikšmes, apibrėžtas toliau nurodytomis sąlygomis. Toliau pateiktos sąvokų apibrėžtys turi tą pačią reikšmę, neatsižvelgiant į tai, ar jos pateiktos vienaskaita, ar daugiskaita."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text8" />
+
+            <TextView
+                android:id="@+id/overlay_text10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Jūsų asmeninių duomenų rinkimas ir naudojimas"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text9" />
+
+            <TextView
+                android:id="@+id/overlay_text11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="left"
+                android:text="Naudojimo duomenys renkami automatiškai, kai naudojatės Paslauga. \n\nNaudojimo duomenys gali apimti tokią informaciją kaip jūsų įrenginio interneto protokolo adresas (pvz., IP adresas), naršyklės tipas, naršyklės versija, mūsų Paslaugos puslapiai, kuriuose lankotės, apsilankymo laikas ir data, tuose puslapiuose praleistas laikas, unikalūs įrenginio identifikatoriai ir kiti diagnostiniai duomenys. \n\nKai Paslaugą pasiekiate mobiliuoju įrenginiu arba per jį, mes galime automatiškai rinkti tam tikrą informaciją, įskaitant, bet neapsiribojant, jūsų naudojamo mobiliojo įrenginio tipą, jūsų mobiliojo įrenginio unikalų ID, jūsų mobiliojo įrenginio IP adresą, jūsų mobiliojo įrenginio operacinę sistemą, jūsų naudojamos mobiliosios interneto naršyklės tipą, unikalius įrenginio identifikatorius ir kitus diagnostinius duomenis. \n\nTaip pat galime rinkti informaciją, kurią Jūsų naršyklė siunčia kiekvieną kartą, kai lankotės mūsų Paslaugoje arba kai Paslaugą pasiekiate mobiliuoju įrenginiu arba per jį."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text10" />
+
+            <TextView
+                android:id="@+id/overlay_text12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Jūsų asmeninių duomenų naudojimas"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text11" />
+
+            <TextView
+                android:id="@+id/overlay_text13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="left"
+                android:text="Susisiekti su Jumis: Susisiekti su Jumis el. paštu, telefono skambučiais, SMS žinutėmis ar kitomis lygiavertėmis elektroninio ryšio formomis, pvz., mobiliosios programėlės stumiamaisiais pranešimais dėl atnaujinimų ar informacinių pranešimų, susijusių su funkcijomis, produktais ar užsakytomis paslaugomis, įskaitant saugumo atnaujinimus, kai tai būtina ar pagrįsta jų įgyvendinimui.\n\nTvarkyti Jūsų užklausas: Norėdami dalyvauti ir tvarkyti Jūsų prašymus mums.\n\nKitais tikslais: Jūsų informaciją galime naudoti kitais tikslais, pvz., duomenų analizei, naudojimo tendencijoms nustatyti, reklaminių kampanijų veiksmingumui nustatyti ir mūsų Paslaugai, produktams, paslaugoms, rinkodarai ir jūsų patirčiai vertinti bei tobulinti."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text12" />
+
+            <TextView
+                android:id="@+id/overlay_text14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Jūsų asmens duomenų saugojimas"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text13" />
+
+            <TextView
+                android:id="@+id/overlay_text15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="left"
+                android:text="Bendrovė saugos Jūsų asmens duomenis tik tiek, kiek tai bus būtina šioje privatumo politikoje nurodytiems tikslams pasiekti. Jūsų Asmens duomenis saugosime ir naudosime tiek, kiek tai būtina, kad galėtume laikytis savo teisinių įsipareigojimų (pavyzdžiui, jei privalome saugoti jūsų duomenis, kad laikytumėmės galiojančių įstatymų), spręsti ginčus ir vykdyti savo teisinius susitarimus ir politiką."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text14" />
+
+            <TextView
+                android:id="@+id/overlay_text16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Jūsų asmens duomenų atskleidimas"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text15" />
+
+            <TextView
+                android:id="@+id/overlay_text17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Teisėsauga"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text16" />
+
+            <TextView
+                android:id="@+id/overlay_text18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="left"
+                android:text="Tam tikromis aplinkybėmis Bendrovė gali būti įpareigota atskleisti Jūsų Asmens duomenis, jei to reikalauja įstatymai arba valstybės institucijos (pvz., teismas ar vyriausybinė agentūra)."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text17" />
+
+            <TextView
+                android:id="@+id/overlay_text19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Jūsų asmeninių duomenų saugumas"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text18" />
+
+            <TextView
+                android:id="@+id/overlay_text20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+                android:gravity="center"
+                android:text="Mums svarbus Jūsų Asmens duomenų saugumas, tačiau nepamirškite, kad joks perdavimo internetu ar elektroninio saugojimo būdas nėra 100 % saugus. Nors Mes stengiamės naudoti komerciškai priimtinas priemones Jūsų Asmens duomenims apsaugoti, negalime garantuoti visiško jų saugumo."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text19" />
+
+            <Button
+                android:id="@+id/fifthbutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginRight="27dp"
+                android:layout_marginBottom="27dp"
+                android:background="@drawable/round_button_background"
+                android:text="Susipažinau su privatumo politiką"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overlay_text20" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

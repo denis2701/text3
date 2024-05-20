@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_button1"
+        android:title="Pagrindinis"
+        android:icon="@drawable/home" />
+
+    <item
+        android:id="@+id/menu_button2"
+        android:title="Statistika"
+        android:icon="@drawable/stats" />
+
+    <item
+        android:id="@+id/menu_button5"
+        android:title="Tikslai"
+        android:icon="@drawable/target" />
+
+    <item
+        android:id="@+id/menu_button3"
+        android:title="Blokuoti"
+        android:icon="@drawable/block" />
+
+    <item
+        android:id="@+id/menu_button4"
+        android:title="Daugiau"
+        android:icon="@drawable/settings" />
+</menu>
