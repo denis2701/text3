@@ -236,9 +236,7 @@ public class UnlockCountService extends JobIntentService {
     }
 
     private String getRandomText() {
-        // Generate a random index within the range of contentTextPhrases array length
         int randomIndex = (int) (Math.random() * contentTextPhrases.length);
-        // Retrieve a random phrase from the array
         return contentTextPhrases[randomIndex];
     }
 
@@ -504,7 +502,7 @@ public class UnlockCountService extends JobIntentService {
         boolean exceededLimit = false;
         for (Task task : taskList) {
             if ("Telefono naudojimo laikas".equals(task.getType())) {
-                long goalTime = convertTimeToMillis(task.getTime());
+                long goalTime = Utils.convertTimeToMillis(task.getTime());
                 if (screenOnTimeToday > goalTime) {
                     exceededLimit = true;
                     break;
@@ -521,7 +519,7 @@ public class UnlockCountService extends JobIntentService {
             if ("Programėlės naudojimo laikas".equals(task.getType())) {
                 String appName = task.getAppName();
                 if (appUsageMap.containsKey(appName)) {
-                    long goalTime = convertTimeToMillis(task.getTime());
+                    long goalTime = Utils.convertTimeToMillis(task.getTime());
                     long appUsageTime = appUsageMap.get(appName);
                     if (appUsageTime > goalTime) {
                         exceededLimit = true;
@@ -677,11 +675,5 @@ public class UnlockCountService extends JobIntentService {
                 }
             }
         }
-    }
-    private long convertTimeToMillis(String time) {
-        String[] parts = time.split(":");
-        int hours = Integer.parseInt(parts[0]);
-        int minutes = Integer.parseInt(parts[1]);
-        return (hours * 60 + minutes) * 60 * 1000;
     }
 }

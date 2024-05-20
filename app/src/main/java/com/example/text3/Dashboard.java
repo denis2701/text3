@@ -201,7 +201,7 @@ public class Dashboard extends Fragment {
         TextView fifthapptext3 = view.findViewById(R.id.text19);
         TextView fifthapptext4 = view.findViewById(R.id.text20);
 
-        long dailyUsageTime = getDailyScreenOnTime();
+        long dailyUsageTime = Utils.getDailyScreenOnTime(context);
         int unblockScreenNumber = getUnlockCount();
 
         String currentDate = getCurrentDate();
@@ -212,8 +212,8 @@ public class Dashboard extends Fragment {
         DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
         dbHelper.removeDuplicateEntries();
 
-        List<BarEntry> barEntries = getDatabaseEntries();
-        List<BarEntry> barEntries2 = getDatabaseEntries2();
+        List<BarEntry> barEntries = Utils.getDatabaseEntries(context);
+        List<BarEntry> barEntries2 = Utils.getDatabaseEntries2(context);
 
         BarChart barChart = view.findViewById(R.id.barGraph);
         BarChart barChart2 = view.findViewById(R.id.barGraph2);
@@ -244,8 +244,8 @@ public class Dashboard extends Fragment {
 
         XAxis xAxis = barChart.getXAxis();
         XAxis xAxis2 = barChart2.getXAxis();
-        List<String> dateLabels = getDatabaseDates();
-        List<String> dateLabels2 = getDatabaseDates2();
+        List<String> dateLabels = Utils.getDatabaseDates(context);
+        List<String> dateLabels2 = Utils.getDatabaseDates2(context);
         Collections.reverse(dateLabels);
         Collections.reverse(dateLabels2);
         xAxis.setValueFormatter(new IndexAxisValueFormatter(dateLabels));
@@ -355,7 +355,7 @@ public class Dashboard extends Fragment {
     }
 
     private void retrieveCategoryUsageStats(Context context) {
-        List<UsageStats> stats = getUsageStats(context);
+        List<UsageStats> stats = Utils.getUsageStats(context);
 
         Map<String, Long> categoryUsageMap = new HashMap<>();
 
@@ -366,7 +366,7 @@ public class Dashboard extends Fragment {
 
             try {
                 ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-                String category = getCategoryForApp(context, packageName);
+                String category = Utils.getCategoryForApp(context, packageName);
 
                 long totalTimeInForeground = usageStats.getTotalTimeInForeground();
                 if (category != null && totalTimeInForeground > 0) {
@@ -393,53 +393,6 @@ public class Dashboard extends Fragment {
         }
     }
 
-    private List<UsageStats> getUsageStats(Context context) {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-        long currentTime = System.currentTimeMillis();
-        List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, currentTime - 1000 * 60, currentTime);
-        return stats;
-    }
-
-    private String getCategoryForApp(Context context, String packageName) {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-            int category = 0;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                category = applicationInfo.category;
-            }
-
-            switch (category) {
-                case ApplicationInfo.CATEGORY_ACCESSIBILITY:
-                    return "Prieinamumas";
-                case ApplicationInfo.CATEGORY_AUDIO:
-                    return "Muzika";
-                case ApplicationInfo.CATEGORY_GAME:
-                    return "Žaidimai";
-                case ApplicationInfo.CATEGORY_IMAGE:
-                    return "Galerija";
-                case ApplicationInfo.CATEGORY_MAPS:
-                    return "Žemėlapiai ir Navigacija";
-                case ApplicationInfo.CATEGORY_NEWS:
-                    return "Žinios";
-                case ApplicationInfo.CATEGORY_PRODUCTIVITY:
-                    return "Produktyvumas";
-                case ApplicationInfo.CATEGORY_SOCIAL:
-                    return "Socialiniai tinklai";
-                case ApplicationInfo.CATEGORY_UNDEFINED:
-                    return "Kita";
-                case ApplicationInfo.CATEGORY_VIDEO:
-                    return "Video ir kinas";
-                default:
-                    return "Nenustatyta";
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return "Undefined";
-    }
-
     private void retrieveUsageStats(Context context) {
         if (context == null) {
             Log.e("retrieveUsageStats", "Context is null");
@@ -454,7 +407,7 @@ public class Dashboard extends Fragment {
         }
 
         long endTime = System.currentTimeMillis();
-        long startTime = getTodayStartInMillis();
+        long startTime = Utils.getTodayStartInMillis();
 
         UsageEvents usageEvents = usageStatsManager.queryEvents(startTime, endTime);
 
@@ -472,12 +425,12 @@ public class Dashboard extends Fragment {
                 } else if (event.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND && lastPackageName.equals(event.getPackageName()) && logOpenCloseEvents) {
                     long closeTimestamp = event.getTimeStamp();
                     if (closeTimestamp - lastOpenTimestamp > 60000) {
-                        String openTime = formatDate(lastOpenTimestamp);
-                        String closeTime = formatDate(closeTimestamp);
-                        usageStatsDataList.add(new AppHistoryData(event.getPackageName(), getAppName(context, event.getPackageName()), openTime, closeTime));
+                        String openTime = Utils.formatDate(lastOpenTimestamp);
+                        String closeTime = Utils.formatDate(closeTimestamp);
+                        usageStatsDataList.add(new AppHistoryData(event.getPackageName(), Utils.getAppName(context, event.getPackageName()), openTime, closeTime));
 
                         DatabaseHelper databaseHelper = new DatabaseHelper(context);
-                        databaseHelper.insertAppUsageData(formatDate2(lastOpenTimestamp), event.getPackageName(), getAppName(context, event.getPackageName()), lastOpenTimestamp, closeTimestamp);
+                        databaseHelper.insertAppUsageData(Utils.formatDate2(lastOpenTimestamp), event.getPackageName(), Utils.getAppName(context, event.getPackageName()), lastOpenTimestamp, closeTimestamp);
                     }
                     logOpenCloseEvents = false;
                 }
@@ -487,36 +440,6 @@ public class Dashboard extends Fragment {
         }
 
         AppHistoryAdapter adapter = new AppHistoryAdapter(usageStatsDataList, context.getPackageManager());
-    }
-
-    private long getTodayStartInMillis() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTimeInMillis();
-    }
-
-    private String formatDate(long timestamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date(timestamp));
-    }
-
-    private String formatDate2(long timestamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(new Date(timestamp));
-    }
-
-    private String getAppName(Context context, String packageName) {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-            return (String) packageManager.getApplicationLabel(applicationInfo);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
     private void displayAppInfo(TextView text1, TextView text2, ImageView imageView, AppUsageInfo appUsageInfo) {
@@ -529,115 +452,6 @@ public class Dashboard extends Fragment {
         text1.setText(appUsageUnlockInfo.getAppName());
         text2.setText(String.valueOf(appUsageUnlockInfo.getLaunchCount()));
         setAppIcon(imageView, appUsageUnlockInfo.getPackageName());
-    }
-
-    private List<BarEntry> getDatabaseEntries2() {
-        List<BarEntry> entries = new ArrayList<>();
-
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE,
-                DatabaseHelper.COLUMN_UNLOCK_COUNT
-        };
-
-        String sortOrder = DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE + " DESC";
-        Cursor cursor = database.query(
-                DatabaseHelper.TABLE_UNLOCK_COUNTS,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
-
-        if (cursor != null) {
-            try {
-                int counter = 0;
-                int numEntries = cursor.getCount();
-                while (cursor.moveToNext() && counter < 7) {
-                    int reversedCounter = numEntries - 1 - counter;
-                    String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE));
-                    long usageTime = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_UNLOCK_COUNT));
-                    entries.add(new BarEntry(reversedCounter, usageTime));
-                    counter++;
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        database.close();
-
-        return entries;
-    }
-
-    private List<String> getDatabaseDates2() {
-        List<String> dates = new ArrayList<>();
-
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE
-        };
-
-        String sortOrder = DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE + " DESC";
-        Cursor cursor = database.query(
-                DatabaseHelper.TABLE_UNLOCK_COUNTS,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
-
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext()) {
-                    String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE));
-                    dates.add(date);
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        database.close();
-
-        return dates;
-    }
-
-    private List<String> getTimeIntervals() {
-        List<String> timeIntervals = new ArrayList<>();
-        timeIntervals.add("00:00-01:00");
-        timeIntervals.add("01:01-02:00");
-        timeIntervals.add("02:01-03:00");
-        timeIntervals.add("03:01-04:00");
-        timeIntervals.add("04:01-05:00");
-        timeIntervals.add("05:01-06:00");
-        timeIntervals.add("06:01-07:00");
-        timeIntervals.add("07:01-08:00");
-        timeIntervals.add("08:01-09:00");
-        timeIntervals.add("09:01-10:00");
-        timeIntervals.add("10:01-11:00");
-        timeIntervals.add("11:01-12:00");
-        timeIntervals.add("12:01-13:00");
-        timeIntervals.add("13:01-14:00");
-        timeIntervals.add("14:01-15:00");
-        timeIntervals.add("15:01-16:00");
-        timeIntervals.add("16:01-17:00");
-        timeIntervals.add("17:01-18:00");
-        timeIntervals.add("08:01-19:00");
-        timeIntervals.add("19:01-20:00");
-        timeIntervals.add("20:01-21:00");
-        timeIntervals.add("21:01-22:00");
-        timeIntervals.add("22:01-23:00");
-        timeIntervals.add("23:01-23:59");
-        return timeIntervals;
     }
 
     private void setAppIcon(ImageView imageView, String packageName) {
@@ -670,7 +484,7 @@ public class Dashboard extends Fragment {
                 if (appUsageUnlockInfo == null) {
                     appUsageUnlockInfo = new AppUsageUnlockInfo();
                     appUsageUnlockInfo.setPackageName(packageName);
-                    appUsageUnlockInfo.setAppName(getAppNameFromPackage(requireContext(), packageName));
+                    appUsageUnlockInfo.setAppName(Utils.getAppNameFromPackage(requireContext(), packageName));
                     appUsageUnlockInfo.setLaunchCount(1); // Initialize to 1
                     appUsageUnlockInfoMap.put(packageName.hashCode(), appUsageUnlockInfo);
                 } else {
@@ -724,7 +538,7 @@ public class Dashboard extends Fragment {
                     if (lastTimeUsed >= startOfDay && lastTimeUsed <= currentTimeMillis) {
                         AppUsageInfo appUsageInfo = new AppUsageInfo();
                         appUsageInfo.setPackageName(usageStats.getPackageName());
-                        appUsageInfo.setAppName(getAppNameFromPackage(requireContext(), usageStats.getPackageName()));
+                        appUsageInfo.setAppName(Utils.getAppNameFromPackage(requireContext(), usageStats.getPackageName()));
                         appUsageInfo.setUsageTime(usageStats.getTotalTimeInForeground());
                         appUsageList.add(appUsageInfo);
 
@@ -756,17 +570,6 @@ public class Dashboard extends Fragment {
         return calendar.getTimeInMillis();
     }
 
-    private String getAppNameFromPackage(Context context2, String packageName) {
-        try {
-            PackageManager packageManager = context2.getPackageManager();
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-            return (String) packageManager.getApplicationLabel(applicationInfo);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return packageName;
-        }
-    }
-
     public static class AppUsageInfo {
         private String packageName;
         private String appName;
@@ -794,30 +597,6 @@ public class Dashboard extends Fragment {
 
         public void setUsageTime(long usageTime) {
             this.usageTime = usageTime;
-        }
-    }
-
-    public static class AppUsageInfoTime {
-        private String appName;
-        private long usageTime;
-        private Drawable appIcon;
-
-        public AppUsageInfoTime(String appName, long usageTime, Drawable appIcon) {
-            this.appName = appName;
-            this.usageTime = usageTime;
-            this.appIcon = appIcon;
-        }
-
-        public String getAppName() {
-            return appName;
-        }
-
-        public long getUsageTime() {
-            return usageTime;
-        }
-
-        public Drawable getAppIcon() {
-            return appIcon;
         }
     }
 
@@ -980,76 +759,6 @@ public class Dashboard extends Fragment {
         }
     }
 
-    private List<BarEntry> getDatabaseEntries() {
-        List<BarEntry> entries = new ArrayList<>();
-
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                DatabaseHelper.COLUMN_DATE,
-                DatabaseHelper.COLUMN_USAGE_TIME
-        };
-
-        String sortOrder = DatabaseHelper.COLUMN_DATE + " DESC";
-        Cursor cursor = database.query(
-                DatabaseHelper.TABLE_USAGE_STATS,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
-
-        if (cursor != null) {
-            try {
-                int counter = 0;
-                int numEntries = cursor.getCount();
-                while (cursor.moveToNext() && counter < 7) {
-                    int reversedCounter = numEntries - 1 - counter;
-                    String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DATE));
-                    long usageTime = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USAGE_TIME));
-                    entries.add(new BarEntry(reversedCounter, usageTime));
-                    counter++;
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        database.close();
-
-        return entries;
-    }
-
-    private long getDailyScreenOnTime() {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) requireActivity().getSystemService(Context.USAGE_STATS_SERVICE);
-        if (usageStatsManager != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            long startOfDay = calendar.getTimeInMillis();
-            long endOfDay = startOfDay + 24 * 60 * 60 * 1000;
-
-            long currentTime = System.currentTimeMillis();
-
-            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, currentTime); // Changed end time to currentTime
-            if (stats != null) {
-                long totalUsageTime = 0;
-                for (UsageStats usageStats : stats) {
-                    long lastTimeUsed = usageStats.getLastTimeUsed();
-                    if (lastTimeUsed >= startOfDay && lastTimeUsed < currentTime) {
-                        totalUsageTime += usageStats.getTotalTimeInForeground();
-                    }
-                }
-                return totalUsageTime;
-            }
-        }
-        return 0;
-    }
-
     private String formatMillis(long millis) {
         long seconds = millis / 1000;
         long minutes = seconds / 60;
@@ -1124,43 +833,6 @@ public class Dashboard extends Fragment {
             }
             database.close();
         }
-    }
-
-    private List<String> getDatabaseDates() {
-        List<String> dates = new ArrayList<>();
-
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                DatabaseHelper.COLUMN_DATE
-        };
-
-        String sortOrder = DatabaseHelper.COLUMN_DATE + " DESC";
-        Cursor cursor = database.query(
-                DatabaseHelper.TABLE_USAGE_STATS,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
-
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext()) {
-                    String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DATE));
-                    dates.add(date);
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        database.close();
-
-        return dates;
     }
 
     private String getCurrentDate() {

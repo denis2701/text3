@@ -103,8 +103,8 @@ public class StatisticsScreen extends Fragment {
         DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
         dbHelper.removeDuplicateEntries();
 
-        List<BarEntry> barEntries = getDatabaseEntries();
-        List<BarEntry> barEntries2 = getDatabaseEntries2();
+        List<BarEntry> barEntries = Utils.getDatabaseEntries(context);
+        List<BarEntry> barEntries2 = Utils.getDatabaseEntries2(context);
 
         barChart = view.findViewById(R.id.barGraphLayout1);
         barChart2 = view.findViewById(R.id.barGraphLayout2);
@@ -186,8 +186,8 @@ public class StatisticsScreen extends Fragment {
         XAxis xAxis5 = barChart5.getXAxis();
         XAxis xAxis6 = barChart6.getXAxis();
 
-        List<String> dateLabels = getDatabaseDates();
-        List<String> dateLabels2 = getDatabaseDates2();
+        List<String> dateLabels = Utils.getDatabaseDates(context);
+        List<String> dateLabels2 = Utils.getDatabaseDates2(context);
         List<String> dateLabels3 = getTimeIntervals();
         List<String> dateLabels4 = getTimeIntervals2();
         List<String> dateLabels5 = getTimeIntervals();
@@ -314,7 +314,7 @@ public class StatisticsScreen extends Fragment {
             }
         });
 
-        List<UsageStats> stats = getUsageStats();
+        List<UsageStats> stats = Utils.getUsageStats(context);
 
         Map<String, Long> categoryUsageMap = new HashMap<>();
 
@@ -325,7 +325,7 @@ public class StatisticsScreen extends Fragment {
 
             try {
                 ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-                String category = getCategoryForApp(requireContext(), packageName);
+                String category = Utils.getCategoryForApp(requireContext(), packageName);
 
                 long totalTimeInForeground = usageStats.getTotalTimeInForeground();
                 if (category != null && totalTimeInForeground > 0) {
@@ -463,7 +463,7 @@ public class StatisticsScreen extends Fragment {
         }
 
         long endTime = System.currentTimeMillis();
-        long startTime = getTodayStartInMillis();
+        long startTime = Utils.getTodayStartInMillis();
 
         UsageEvents usageEvents = usageStatsManager.queryEvents(startTime, endTime);
 
@@ -480,11 +480,11 @@ public class StatisticsScreen extends Fragment {
                 } else if (event.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND && lastPackageName.equals(event.getPackageName()) && logOpenCloseEvents) {
                     long closeTimestamp = event.getTimeStamp();
                     if (closeTimestamp - lastOpenTimestamp > 60000) {
-                        String openTime = formatDate(lastOpenTimestamp);
-                        String closeTime = formatDate(closeTimestamp);
-                        usageStatsDataList.add(new AppHistoryData(event.getPackageName(), getAppName(context, event.getPackageName()), openTime, closeTime));
+                        String openTime = Utils.formatDate(lastOpenTimestamp);
+                        String closeTime = Utils.formatDate(closeTimestamp);
+                        usageStatsDataList.add(new AppHistoryData(event.getPackageName(), Utils.getAppName(context, event.getPackageName()), openTime, closeTime));
 
-                        databaseHelper.insertAppUsageData(formatDate2(lastOpenTimestamp), event.getPackageName(), getAppName(context, event.getPackageName()), lastOpenTimestamp, closeTimestamp);
+                        databaseHelper.insertAppUsageData(Utils.formatDate2(lastOpenTimestamp), event.getPackageName(), Utils.getAppName(context, event.getPackageName()), lastOpenTimestamp, closeTimestamp);
                     }
                     logOpenCloseEvents = false;
                 }
@@ -749,53 +749,6 @@ public class StatisticsScreen extends Fragment {
         return timeIntervals;
     }
 
-    private String getCategoryForApp(Context context, String packageName) {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-            int category = 0;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                category = applicationInfo.category;
-            }
-
-            switch (category) {
-                case ApplicationInfo.CATEGORY_ACCESSIBILITY:
-                    return "Prieinamumas";
-                case ApplicationInfo.CATEGORY_AUDIO:
-                    return "Muzika";
-                case ApplicationInfo.CATEGORY_GAME:
-                    return "Žaidimai";
-                case ApplicationInfo.CATEGORY_IMAGE:
-                    return "Galerija";
-                case ApplicationInfo.CATEGORY_MAPS:
-                    return "Žemėlapiai ir Navigacija";
-                case ApplicationInfo.CATEGORY_NEWS:
-                    return "Žinios";
-                case ApplicationInfo.CATEGORY_PRODUCTIVITY:
-                    return "Produktyvumas";
-                case ApplicationInfo.CATEGORY_SOCIAL:
-                    return "Socialiniai tinklai";
-                case ApplicationInfo.CATEGORY_UNDEFINED:
-                    return "Kita";
-                case ApplicationInfo.CATEGORY_VIDEO:
-                    return "Video ir kinas";
-                default:
-                    return "Nenustatyta";
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return "Undefined";
-    }
-
-    private List<UsageStats> getUsageStats() {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) requireContext().getSystemService(Context.USAGE_STATS_SERVICE);
-        long currentTime = System.currentTimeMillis();
-        List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, currentTime - 1000 * 60, currentTime);
-        return stats;
-    }
-
     private class PieValueFormatter extends ValueFormatter {
         @Override
         public String getFormattedValue(float value) {
@@ -806,166 +759,6 @@ public class StatisticsScreen extends Fragment {
 
             return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes % 60);
         }
-    }
-
-    private List<BarEntry> getDatabaseEntries() {
-        List<BarEntry> entries = new ArrayList<>();
-
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                DatabaseHelper.COLUMN_DATE,
-                DatabaseHelper.COLUMN_USAGE_TIME
-        };
-
-        String sortOrder = DatabaseHelper.COLUMN_DATE + " DESC";
-        Cursor cursor = database.query(
-                DatabaseHelper.TABLE_USAGE_STATS,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
-
-        if (cursor != null) {
-            try {
-                int counter = 0;
-                int numEntries = cursor.getCount();
-                while (cursor.moveToNext() && counter < 7) {
-                    int reversedCounter = numEntries - 1 - counter;
-                    String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DATE));
-                    long usageTime = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USAGE_TIME));
-                    entries.add(new BarEntry(reversedCounter, usageTime));
-                    counter++;
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        database.close();
-
-        return entries;
-    }
-
-    private List<BarEntry> getDatabaseEntries2() {
-        List<BarEntry> entries = new ArrayList<>();
-
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE,
-                DatabaseHelper.COLUMN_UNLOCK_COUNT
-        };
-
-        String sortOrder = DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE + " DESC";
-        Cursor cursor = database.query(
-                DatabaseHelper.TABLE_UNLOCK_COUNTS,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
-
-        if (cursor != null) {
-            try {
-                int counter = 0;
-                int numEntries = cursor.getCount();
-                while (cursor.moveToNext() && counter < 7) {
-                    int reversedCounter = numEntries - 1 - counter;
-                    String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE));
-                    long usageTime = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_UNLOCK_COUNT));
-                    entries.add(new BarEntry(reversedCounter, usageTime));
-                    counter++;
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        database.close();
-
-        return entries;
-    }
-
-    private List<String> getDatabaseDates() {
-        List<String> dates = new ArrayList<>();
-
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                DatabaseHelper.COLUMN_DATE
-        };
-
-        String sortOrder = DatabaseHelper.COLUMN_DATE + " DESC";
-        Cursor cursor = database.query(
-                DatabaseHelper.TABLE_USAGE_STATS,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
-
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext()) {
-                    String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DATE));
-                    dates.add(date);
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        database.close();
-
-        return dates;
-    }
-
-    private List<String> getDatabaseDates2() {
-        List<String> dates = new ArrayList<>();
-
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE
-        };
-
-        String sortOrder = DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE + " DESC";
-        Cursor cursor = database.query(
-                DatabaseHelper.TABLE_UNLOCK_COUNTS,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
-
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext()) {
-                    String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_UNLOCK_COUNT_DATE));
-                    dates.add(date);
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        database.close();
-
-        return dates;
     }
 
     private class YAxisValueFormatter2 extends ValueFormatter {

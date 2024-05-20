@@ -193,13 +193,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null, null,null, null);
 
         if (cursor != null && cursor.getCount() > 0) {
-            // Entry already exists, do nothing
             cursor.close();
             db.close();
             return;
         }
 
-        // Entry doesn't exist, insert the new entry
         ContentValues values = new ContentValues();
         values.put(APP_HISTORY_DATE, date);
         values.put(APP_HISTORY_PACKAGE, packageName);
@@ -208,7 +206,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(APP_HISTORY_CLOSE, closeTimestamp);
         db.insert(APP_HISTORY_USAGE, null, values);
 
-        // Close cursor and database
         if (cursor != null) {
             cursor.close();
         }
@@ -274,7 +271,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return packageName; // Return package name if app name is not found
+        return packageName;
     }
 
     private String formatDate(long timestamp) {
@@ -284,7 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<Task> getAllTasks() {
         List<Task> taskList = new ArrayList<>();
-        SQLiteDatabase db = this.getWritableDatabase(); // Get a reference to the writable database
+        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TASKS_TABLE_NAME, null);
         if (cursor != null && cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(COL_ID);

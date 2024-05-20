@@ -43,12 +43,12 @@ public class SettingsScreen extends Fragment {
             public void onClick(View v) {
                 Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
                 smsIntent.setData(Uri.parse("smsto:")); // This ensures only SMS apps respond
-                smsIntent.putExtra("sms_body", "Hi, I'm using an app that tracks my phone usage, as I try to use my phone more less often, come join me if you are interested! \"https://we.tl/t-Ta7RE3iL0Z\"");
+                smsIntent.putExtra("sms_body", "Sveikas, naudoju programėlę, kuri seka mano telefono naudojimą, nes stengiuosi telefoną naudoti rečiau, jei tave domina, prisijunk prie manęs! \"https://we.tl/t-Ta7RE3iL0Z\"");
 
                 if (smsIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(smsIntent);
                 } else {
-                    Toast.makeText(getActivity(), "No messaging app found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Nerasta praneimo siuntimo programėlės", Toast.LENGTH_SHORT).show();
                 }
             }
         });

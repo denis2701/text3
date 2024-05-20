@@ -28,7 +28,6 @@ public class PhoneUsageNotifier extends BroadcastReceiver {
         Intent intent = new Intent(context, PhoneUsageNotifier.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Set the alarm to start at 8:00 AM and repeat every 2 hours until midnight
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 8);

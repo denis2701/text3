@@ -71,10 +71,10 @@ public class Goalscreen extends Fragment {
     }
 
     private void checkPhoneUsageTime(List<Task> taskList) {
-        long screenOnTimeToday = getDailyScreenOnTime();
+        long screenOnTimeToday = Utils.getDailyScreenOnTime(requireContext());
         for (Task task : taskList) {
             if ("Telefono naudojimo laikas".equals(task.getType())) {
-                long goalTime = convertTimeToMillis(task.getTime());
+                long goalTime = Utils.convertTimeToMillis(task.getTime());
                 if (screenOnTimeToday > goalTime) {
                     sendNotification("Per ilgas naudojimosi telefonu laikas", "Ar pamiršai, kad nustatei tikslą naudotis telefonu mažiau?");
                     Log.d("TAG", String.valueOf(screenOnTimeToday));
@@ -90,7 +90,7 @@ public class Goalscreen extends Fragment {
             if ("Programėlės naudojimo laikas".equals(task.getType())) {
                 String appName = task.getAppName();
                 if (appUsageMap.containsKey(appName)) {
-                    long goalTime = convertTimeToMillis(task.getTime());
+                    long goalTime = Utils.convertTimeToMillis(task.getTime());
                     long appUsageTime = appUsageMap.get(appName);
                     if (appUsageTime > goalTime) {
                         sendNotification("Per ilgas programėlės naudojimo laikas", "Ar pamiršai, kad nustatei tikslą naudotis " + appName + " programėlę mažiau?");
@@ -172,7 +172,7 @@ public class Goalscreen extends Fragment {
 
             if (event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED) {
                 String packageName = event.getPackageName();
-                String appName = getAppNameFromPackage(requireContext(), packageName);
+                String appName = Utils.getAppNameFromPackage(requireContext(), packageName);
 
                 int launchCount = appUnlockCountMap.getOrDefault(appName, 0);
                 appUnlockCountMap.put(appName, launchCount + 1);
@@ -180,45 +180,6 @@ public class Goalscreen extends Fragment {
         }
 
         return appUnlockCountMap;
-    }
-
-    private String getAppNameFromPackage(Context context2, String packageName) {
-        try {
-            PackageManager packageManager = context2.getPackageManager();
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-            return (String) packageManager.getApplicationLabel(applicationInfo);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return packageName;
-        }
-    }
-
-    private long getDailyScreenOnTime() {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) requireActivity().getSystemService(Context.USAGE_STATS_SERVICE);
-        if (usageStatsManager != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            long startOfDay = calendar.getTimeInMillis();
-            long endOfDay = startOfDay + 24 * 60 * 60 * 1000;
-
-            long currentTime = System.currentTimeMillis();
-
-            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, currentTime); // Changed end time to currentTime
-            if (stats != null) {
-                long totalUsageTime = 0;
-                for (UsageStats usageStats : stats) {
-                    long lastTimeUsed = usageStats.getLastTimeUsed();
-                    if (lastTimeUsed >= startOfDay && lastTimeUsed < currentTime) {
-                        totalUsageTime += usageStats.getTotalTimeInForeground();
-                    }
-                }
-                return totalUsageTime;
-            }
-        }
-        return 0;
     }
 
     private void getDailyAppScreenOnTime() {
@@ -265,12 +226,5 @@ public class Goalscreen extends Fragment {
 
         NotificationManager notificationManager = requireActivity().getSystemService(NotificationManager.class);
         notificationManager.notify(1, builder.build());
-    }
-
-    private long convertTimeToMillis(String time) {
-        String[] parts = time.split(":");
-        int hours = Integer.parseInt(parts[0]);
-        int minutes = Integer.parseInt(parts[1]);
-        return (hours * 60 + minutes) * 60 * 1000;
     }
 }
