@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/androidTest/java/com/example/text3/AppUnlockCountGoalCreateTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/androidTest/java/com/example/text3/AppUsageGoalCreateTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/androidTest/java/com/example/text3/BlockedAppListTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/androidTest/java/com/example/text3/DeclineGoalCreateTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/androidTest/java/com/example/text3/MostUsedAppsTest.java" charset="UTF-8" />
+  </component>
+</project>

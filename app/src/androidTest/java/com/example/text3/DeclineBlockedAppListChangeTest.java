@@ -2,14 +2,12 @@ package com.example.text3;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
@@ -18,11 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -30,83 +24,82 @@ import androidx.test.filters.LargeTest;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class CreateGoalsTest {
+public class DeclineBlockedAppListChangeTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void createGoalsTest() {
+    public void declineBlockedAppListChangeTest() {
         ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(R.id.menu_button5), withContentDescription("Tikslai"),
+                allOf(withId(R.id.menu_button3), withContentDescription("Blokuoti"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.bottomNavigation),
                                         0),
-                                2),
+                                3),
                         isDisplayed()));
         bottomNavigationItemView.perform(click());
 
-
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.categoryButton), withText("Sukurti nauja"),
+                allOf(withId(R.id.appUsageButton), withText("Keisti"),
                         childAtPosition(
-                                allOf(withId(R.id.linear_layout_tasks),
+                                allOf(withId(R.id.linear_layout_apps),
                                         childAtPosition(
                                                 withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 0)),
-                                1)));
-        appCompatButton.perform(scrollTo(), click());
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.StatsName), withText("Sukurti naują tikslą"),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class))),
+                                1),
                         isDisplayed()));
-        textView.check(matches(withText("Sukurti naują tikslą")));
+        appCompatButton.perform(click());
 
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.GoalTypeText), withText("Tikslo tipas"),
-                        withParent(withParent(withId(R.id.GoalTypeFrame))),
+        ViewInteraction appCompatCheckBox = onView(
+                allOf(withId(R.id.appCheckbox),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.appListRecyclerView),
+                                        1),
+                                0),
                         isDisplayed()));
-        textView2.check(matches(withText("Tikslo tipas")));
+        appCompatCheckBox.perform(click());
 
-        ViewInteraction viewGroup = onView(
-                allOf(withParent(allOf(withId(R.id.GoalTypeFrame),
-                                withParent(IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class)))),
+        ViewInteraction appCompatCheckBox2 = onView(
+                allOf(withId(R.id.appCheckbox),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.appListRecyclerView),
+                                        1),
+                                0),
                         isDisplayed()));
-        viewGroup.check(matches(isDisplayed()));
+        appCompatCheckBox2.perform(click());
 
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.GoalTimeText), withText("Laikas"),
-                        withParent(withParent(withId(R.id.GoalTimePicker))),
+        ViewInteraction appCompatCheckBox3 = onView(
+                allOf(withId(R.id.appCheckbox),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.appListRecyclerView),
+                                        2),
+                                0),
                         isDisplayed()));
-        textView3.check(matches(withText("Laikas")));
+        appCompatCheckBox3.perform(click());
 
-        ViewInteraction viewGroup2 = onView(
-                allOf(withParent(allOf(withId(R.id.GoalTimePicker),
-                                withParent(IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class)))),
+        ViewInteraction appCompatCheckBox4 = onView(
+                allOf(withId(R.id.appCheckbox),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.appListRecyclerView),
+                                        2),
+                                0),
                         isDisplayed()));
-        viewGroup2.check(matches(isDisplayed()));
+        appCompatCheckBox4.perform(click());
 
-        ViewInteraction button = onView(
-                allOf(withId(R.id.yellowButton), withText("Išsaugoti"),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class))),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
-
-        ViewInteraction button2 = onView(
-                allOf(withId(R.id.blackButton), withText("Atšaukti"),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class))),
-                        isDisplayed()));
-        button2.check(matches(isDisplayed()));
+        pressBack();
     }
 
     private static Matcher<View> childAtPosition(
