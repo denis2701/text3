@@ -31,6 +31,13 @@ public class SettingsScreen extends Fragment {
             }
         });
 
+        rootView.findViewById(R.id.yellowButton2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SettingScreen.class));
+            }
+        });
+
         rootView.findViewById(R.id.yellowButton3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

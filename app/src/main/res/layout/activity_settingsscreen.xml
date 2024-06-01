@@ -81,6 +81,21 @@
                 app:layout_constraintTop_toBottomOf="@+id/yellowButton"  />
 
             <Button
+                android:id="@+id/yellowButton2"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginRight="27dp"
+                android:background="@drawable/round_button_background"
+                android:text="Pagalba"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/otherName" />
+
+            <Button
                 android:id="@+id/yellowButton3"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
@@ -93,7 +108,7 @@
                 android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/otherName" />
+                app:layout_constraintTop_toBottomOf="@+id/yellowButton2" />
 
             <Button
                 android:id="@+id/yellowButton5"
